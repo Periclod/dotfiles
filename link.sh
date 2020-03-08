@@ -16,7 +16,8 @@ ln -s $(pwd)/config/picom/picom.conf ~/.config/picom/
 mkdir -p ~/.config/dunst/
 ln -s $(pwd)/config/dunst/dunstrc ~/.config/dunst/
 
-
+mkdir -p ~/.config/rofi/
+ln -s $(pwd)/config/rofi/config.rasi ~/.config/rofi/
 
 mkdir -p ~/.local/scripts/
 ln -s $(pwd)/scripts/* ~/.local/scripts/
