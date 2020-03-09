@@ -117,8 +117,6 @@ source /usr/share/zoxide/zoxide.zsh
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
 
-
-
 # Use fd and fzf to get the args to a command.
 # Works only with zsh
 # Examples:
@@ -138,16 +136,19 @@ f() fr "$@" --max-depth 1
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
 fo() (
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(fzf --preview 'bat --color=always {}' --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 )
 
+export FZF_CTRL_T_OPTS="--preview 'bat --color always {}'"
 
-# aliases
+#
+# ALIASES
+#
 
 # color and stuff
 alias ls="exa"
-alias l="exa -lahF"
+alias l="exa -laF"
 
 # highlighting in cat!
 alias cat="bat -p --pager never"
