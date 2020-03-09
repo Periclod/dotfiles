@@ -108,4 +108,11 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
 AUTO_NOTIFY_IGNORE+=("spt" "ytop")
 
+# smarter cd
+export _ZO_DATA=$HOME/.local/share/zoxide/database
+source /usr/share/zoxide/zoxide.zsh
+
+# fuzzy finder
+source /usr/share/fzf/completion.zsh
+source /usr/share/fzf/key-bindings.zsh
 
