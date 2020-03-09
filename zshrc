@@ -87,7 +87,8 @@ fi
 PROMPT='%B%2~%f%b %# '
 
 # Manually enable Ctrl+R search
-bindkey "^R" history-incremental-search-backward
+# no longer needed because fzf
+# bindkey "^R" history-incremental-search-backward
 
 # fix broken backward-delete (no idea what's the intended way to use it
 bindkey -v '^?' backward-delete-char
@@ -106,7 +107,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # notify when long running jobs are done
 source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
-AUTO_NOTIFY_IGNORE+=("spt" "ytop")
+AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff")
 
 # smarter cd
 export _ZO_DATA=$HOME/.local/share/zoxide/database
@@ -115,4 +116,44 @@ source /usr/share/zoxide/zoxide.zsh
 # fuzzy finder
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
+
+
+
+# Use fd and fzf to get the args to a command.
+# Works only with zsh
+# Examples:
+# fr mv # To move files. You can write the destination after selecting the files.
+# fr 'echo Selected:'
+# fr 'echo Selected music:' --extention mp3
+# f rm # To rm files in current directory
+fr() {
+    sels=( "${(@f)$(fd "${fd_default[@]}" "${@:2}"| fzf)}" )
+    test -n "$sels" && print -z -- "$1 ${sels[@]:q:q}"
+}
+
+# Like f, but not recursive.
+f() fr "$@" --max-depth 1
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fo() (
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+)
+
+
+# aliases
+
+# color and stuff
+alias ls="exa"
+alias l="exa -lahF"
+
+# highlighting in cat!
+alias cat="bat -p --pager never"
+# use bat for man pages
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+alias diff="diff-so-fancy"
+
 
