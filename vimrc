@@ -10,7 +10,9 @@ set smartindent
 set number relativenumber
 
 " ignore case when searching (set noic to disable)
-set ic
+" set ic
+" ignore case unless uppercase is used
+set smartcase
 
 " Highlight searches
 set hls
@@ -19,12 +21,22 @@ map <C-c> <esc>:noh<enter>
 " highlight while typing
 set incsearch
 
+" file search be fuzzy
+" search files recursevly in folders
+set path+=**
+" tab completion
+set wildmenu
 
 
 " copy selection in visual mode
 vmap <C-S-c> "+y
 " cut selection in visual mode
 vmap <C-S-x> "+x
+
+" tab whole selection
+vmap <Tab> :><enter>
+" and untab on shift+tab
+vmap <S-Tab> :<<enter>
 
 
 " Add optional packages.

@@ -106,4 +106,6 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # notify when long running jobs are done
 source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
+AUTO_NOTIFY_IGNORE+=("spt" "ytop")
+
 
