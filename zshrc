@@ -107,7 +107,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # notify when long running jobs are done
 source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
-AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff")
+AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker")
 
 # smarter cd
 export _ZO_DATA=$HOME/.local/share/zoxide/database
@@ -151,10 +151,16 @@ alias ls="exa"
 alias l="exa -laF"
 
 # highlighting in cat!
-alias cat="bat -p --pager never"
+# alias cat="bat -p --pager never" # since bat is smart enough in non-interactive cases to be cat compatible
+alias cat="bat"
 # use bat for man pages
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
+# better diff
 alias diff="diff-so-fancy"
+
+# more comfortable zoxide
+alias c="z"
+
 
 
