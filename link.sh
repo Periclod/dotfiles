@@ -22,7 +22,9 @@ ln -s $(pwd)/config/rofi/config.rasi ~/.config/rofi/
 mkdir -p ~/.local/scripts/
 ln -s $(pwd)/scripts/* ~/.local/scripts/
 
-
 # set git diff tool
 git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+
+
+echo "Don't forget to symlink jetbrains/vim_settings.xml to ~/.IntelliJIdea{VERSION}/config/options
 
