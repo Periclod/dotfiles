@@ -2,12 +2,23 @@
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
+let mapleader = " "
 
 set shiftwidth=4
 set autoindent
 set smartindent
 
 set number relativenumber
+
+
+" remap ` to § because ` is a bitch
+onoremap § `
+nnoremap § `
+onoremap ` §
+nnoremap ` §
+
+" bind Ctrl+J to jump to tags (Ctrl+J is just like j per default?)
+nnoremap <C-j> <C-]>
 
 " ignore case when searching (set noic to disable)
 " set ic
