@@ -1,7 +1,5 @@
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
 setopt autocd extendedglob notify
 unsetopt beep
 bindkey -v
@@ -76,6 +74,19 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
+
+#
+# better history
+#
+HISTSIZE=5000
+SAVEHIST=5000
+# ignore duplicates
+setopt hist_ignore_all_dups
+# ignore commands with space prefix
+setopt hist_ignore_space
+# live history update for all shells
+setopt inc_append_history
+setopt share_history
 
 
 # Display better prompt
