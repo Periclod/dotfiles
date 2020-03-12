@@ -10,6 +10,11 @@ set smartindent
 
 set number relativenumber
 
+" set cursor options for VTE based terminals
+" https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+let &t_SI = "\<Esc>[5 q"
+let &t_SR = "\<Esc>[3 q"
+let &t_EI = "\<Esc>[1 q"
 
 " remap ` to § because ` is a bitch
 onoremap § `

@@ -95,7 +95,31 @@ setopt share_history
 # %(?.success.failure) shows the previous command
 # %B - %b bold
 # %2~ show last 2 directory of pwd
-PROMPT='%B%2~%f%b %# '
+PROMPT='%B%2~%f%b ❯ '
+
+
+# cursor support for vi mode
+_fix_cursor() {
+   echo -ne '\e[5 q'
+}
+precmd_functions+=(_fix_cursor)
+
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+KEYTIMEOUT=1
+
+
 
 # Manually enable Ctrl+R search
 # no longer needed because fzf
@@ -173,5 +197,14 @@ alias diff="diff-so-fancy"
 # more comfortable zoxide
 alias c="z"
 
+# kubectl stuff
+alias k="kubectl"
+alias ka="kubectl apply"
+alias kd="kubectl describe"
+alias kdel="kubectl delete"
+alias kg="kubectl get"
+
+alias ki="kubectl -n istio-system"
+alias kq="kubectl -n dev-querysalad"
 
 
