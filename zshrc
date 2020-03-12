@@ -122,7 +122,7 @@ AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker")
 
 # smarter cd
 export _ZO_DATA=$HOME/.local/share/zoxide/database
-source /usr/share/zoxide/zoxide.zsh
+eval "$(zoxide init zsh --no-define-aliases)"
 
 # fuzzy finder
 source /usr/share/fzf/completion.zsh
