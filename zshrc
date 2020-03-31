@@ -177,6 +177,9 @@ fo() (
 
 export FZF_CTRL_T_OPTS="--preview 'bat --color always {}'"
 
+# syntax highlighting (like fish)
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 #
 # ALIASES
 #
