@@ -19,8 +19,12 @@ ln -s $(pwd)/config/dunst/dunstrc ~/.config/dunst/
 mkdir -p ~/.config/rofi/
 ln -s $(pwd)/config/rofi/config.rasi ~/.config/rofi/
 
+mkdir -p ~/.config/redshift/
+ln -s $(pwd)/config/redshift/redshift.conf ~/.config/redshift/redshift.conf
+
 mkdir -p ~/.local/scripts/
 ln -s $(pwd)/scripts/* ~/.local/scripts/
+
 
 # set git diff tool
 git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
