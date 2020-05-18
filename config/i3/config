@@ -6,7 +6,7 @@
 #
 
 # Capslock become the Escape and the y becomes the z
-exec --no-startup-id setxkbmap -option caps:escape; setxkbmap de
+exec --no-startup-id setxkbmap -option caps:escape; setxkbmap us
 
 gaps inner 15
 smart_gaps on
