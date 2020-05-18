@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+from i3ipc import Connection
+import subprocess
+import json
+import sys
+
+NVIDIA_OUTPUTS = [ "HDMI-0", "DP-4", "DP-2" ]
+AMD_OUTPUTS = [ "DVI-D-0", "HDMI-A-3", "DisplayPort-1" ]
+
+i3 = Connection()
+
+is_nvidia = subprocess.call("xrandr --listproviders | grep -i nvidia > /dev/null", shell=True) == 0
+
+if len(sys.argv) == 1:
+    print("Missing command")
+    sys.exit(1)
+
+cmd = sys.argv[1]
+if cmd == "save-monitor":
+    wss = i3.get_workspaces()
+    state = {}
+    for ws in wss:
+            index = -1
+            if is_nvidia:
+                    index = NVIDIA_OUTPUTS.index(ws.output)
+            else:
+                    index = AMD_OUTPUTS.index(ws.output)
+            state[ws.name] = index
+
+    print(json.dumps(state))
+
+elif cmd == "restore-monitor":
+    outputs = json.loads(sys.argv[2])
+    for w, o in outputs.items():
+        if is_nvidia:
+            output_name = NVIDIA_OUTPUTS[o]
+        else:
+            output_name = AMD_OUTPUTS[o]
+        i3.command("workspace " + w)
+        i3.command("move workspace to output " + output_name)
+
+elif cmd == "save-visible":
+    state = {
+        'visible': [],
+        'focused': ""
+    }
+    wss = i3.get_workspaces()
+    for ws in wss:
+        if ws.visible:
+            state['visible'].append(ws.name)
+        if ws.focused:
+            state['focused'] = ws.name
+
+    print(json.dumps(state))
+
+elif cmd == "restore-visible":
+    data = json.loads(sys.argv[2])
+    for ws in data['visible']:
+        i3.command("workspace " + ws)
+    i3.command("workspace " + data['focused'])
+
+

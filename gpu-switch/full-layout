@@ -1,0 +1,72 @@
+#!/bin/bash
+
+SAVEPATH="$HOME/.cache/i3-layout"
+WSPATH="layouts"
+LAYOUT_PATH="$SAVEPATH/$WSPATH"
+
+ACTION=$1
+
+mkdir -p $LAYOUT_PATH
+
+
+
+case $ACTION in
+    restore)
+		workspaces=$(find $LAYOUT_PATH -type f -iname '*.json' -exec basename {} \; | \
+		     grep -Po '.*_\K(.*)_' | \
+		     sed 's/_//' | \
+			 sort | \
+		     uniq)
+
+        echo "Found workspaces: $workspaces"
+
+        # restore workspaces
+        for ws in ${workspaces[*]}; do
+            echo "restoring layout of $ws"
+            i3-resurrect restore -d $LAYOUT_PATH -w $ws --layout-only
+		done
+
+		echo "moving workspaces to monitors"
+		~/.local/scripts/i3-layout restore-monitor "$(cat $SAVEPATH/monitors.json)"
+
+        for ws in ${workspaces[*]}; do
+            echo "restoring programms of $ws"
+            i3-resurrect restore -d $LAYOUT_PATH -w $ws --programs-only 
+        done
+
+		if test -f $SAVEPATH/firefox; then
+			firefox &
+		fi
+
+		echo "showing correct monitors"
+		~/.local/scripts/i3-layout restore-visible "$(cat $SAVEPATH/visible.json)"
+
+        notify-send "i3-resurrect" "Restored all workspaces"
+	;;
+	save)
+        # find running workspaces
+        workspaces=$(i3-msg -t get_workspaces | jq '.[] | .name')
+        echo "Found workspaces: $workspaces"
+
+        # remove old saves
+        rm -f ${LAYOUT_PATH}/*
+		rm -f $SAVEPATH/firefox
+
+        # Save workspaces with programs running
+        for ws in ${workspaces[*]}; do 
+			temp="${ws%\"}"
+            temp="${temp#\"}"
+            echo "saving $temp"
+            i3-resurrect save -d $LAYOUT_PATH -w $temp &
+        done
+
+		~/.local/scripts/i3-layout save-monitor > $SAVEPATH/monitors.json &
+		~/.local/scripts/i3-layout save-visible  > $SAVEPATH/visible.json &
+
+		if pgrep -x firefox > /dev/null; then
+			touch $SAVEPATH/firefox
+		fi
+
+		wait
+	;;
+esac

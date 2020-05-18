@@ -1,0 +1,46 @@
+#!/bin/bash
+
+TARGET=$1
+
+if [ "$TARGET" == "nvidia" ]; then
+	echo "switching to nvidia gpu"
+	cat <<EOF > /etc/X11/xorg.conf.d/10-gpu.conf
+Section "Device"
+	Identifier "nvidia"
+	Driver "nvidia"
+	BusID "PCI:2:0:0"
+EndSection
+
+Section "Screen"
+	Identifier "screen"
+	Device "nvidia"
+	Option "AllowIndirectGLXProtocol" "off"
+EndSection
+EOF
+	modprobe nvidia_drm
+	modprobe nvidia_modeset
+	modprobe nvidia
+	rmmod amdgpu
+else
+	echo "switching to amd gpu"
+	cat <<EOT > /etc/X11/xorg.conf.d/10-gpu.conf
+Section "Device"
+	Identifier "amd"
+	Driver "amdgpu"
+	BusID "PCI:1:0:0"
+	Option "TearFree" "true"
+EndSection
+
+Section "Screen"
+	Identifier "screen"
+	Device "amd"
+EndSection
+EOT
+
+	modprobe amdgpu
+
+	rmmod nvidia_drm
+	rmmod nvidia_modeset
+	rmmod nvidia
+fi
+

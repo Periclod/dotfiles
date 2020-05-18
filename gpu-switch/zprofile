@@ -1,0 +1,12 @@
+# start X if on TTY 1
+if [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+	if test -f /tmp/pls-fix-reset-bug; then
+		rm /tmp/pls-fix-reset-bug
+		sudo rtcwake -s 1 -m mem
+	fi
+	if test -f ~/.config/gpu-switcher/prehook.sh; then
+		~/.config/gpu-switcher/prehook.sh
+	fi
+	exec startx
+fi
+
