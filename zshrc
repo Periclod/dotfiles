@@ -142,7 +142,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # notify when long running jobs are done
 source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
-AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker")
+AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker" "k logs" "k exec")
 
 # smarter cd
 export _ZO_DATA=$HOME/.local/share/zoxide/database
@@ -190,9 +190,6 @@ alias l="exa -laF"
 alias cat="bat"
 # use bat for man pages
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-
-# better diff
-alias diff="diff-so-fancy"
 
 # more comfortable zoxide
 alias c="z"
