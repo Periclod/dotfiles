@@ -129,7 +129,7 @@ KEYTIMEOUT=1
 bindkey -v '^?' backward-delete-char
 
 # Load color scheme from wal
-(cat ~/.cache/wal/sequences &)
+( [ -f ~/.cache/wal/sequences ] && cat ~/.cache/wal/sequences &)
 
 
 # plugins
