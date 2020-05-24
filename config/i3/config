@@ -28,6 +28,16 @@ font pango:monospace 10
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
 
+exec ~/.screenlayout/multi-monitor.sh
+bindsym $mod+g exec --no-startup-id ~/.local/scripts/gamemode.sh
+bindsym $mod+Shift+a exec ~/.local/scripts/audioctl.sh
+bindsym $mod+Shift+s exec ~/.local/scripts/switch-spotify.sh
+
+
+# Autostart
+exec --no-startup-id redshift
+exec --no-startup-id flameshot
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
