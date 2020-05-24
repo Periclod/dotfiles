@@ -6,6 +6,7 @@ i3status
 betterlockscreen
 zsh-auto-notify
 zsh-autosuggestions
+zsh-syntax-highlighting
 python-pywal
 bat
 diff-so-fancy
