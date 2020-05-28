@@ -138,10 +138,10 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
 ZSH_AUTOSUGGEST_USE_ASYNC=yes
 # bindkey '^ ' autosuggest-accept
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # notify when long running jobs are done
-source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
+[ -f /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh ] && source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
 AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker" "k logs" "k exec")
 
 # smarter cd
@@ -149,8 +149,11 @@ export _ZO_DATA=$HOME/.local/share/zoxide/database
 eval "$(zoxide init zsh --no-define-aliases)"
 
 # fuzzy finder
-source /usr/share/fzf/completion.zsh
-source /usr/share/fzf/key-bindings.zsh
+#linux
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+#macos
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Use fd and fzf to get the args to a command.
 # Works only with zsh
@@ -206,5 +209,6 @@ alias kg="kubectl get"
 
 alias ki="kubectl -n istio-system"
 alias kq="kubectl -n dev-querysalad"
+
 
 
