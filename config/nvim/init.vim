@@ -105,6 +105,10 @@ Plug 'https://github.com/svermeulen/vim-subversive'
 Plug 'https://github.com/svermeulen/vim-yoink'
 " comment stuff out
 Plug 'tpope/vim-commentary'
+" Commit message popup with history
+Plug 'rhysd/git-messenger.vim'
+" floating terms on demand
+Plug 'voldikss/vim-floaterm'
 
 " Themes
 Plug 'rafalbromirski/vim-aurora'
@@ -272,6 +276,12 @@ nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
 nnoremap <C-j> gi
 
 
+" highlight yank
+augroup highlight_yank 
+	autocmd! 
+	autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000) 
+augroup END 
+
 " NERDTree config
 
 let NERDTreeAutoDeleteBuffer = 1
@@ -291,7 +301,8 @@ let $FZF_DEFAULT_COMMAND = 'rg --hidden --files'
 nnoremap ; :Clap buffers<Enter>
 nnoremap <Leader>m :Clap marks<Enter>
 nnoremap <leader>O :Clap files<Enter>
-nnoremap <leader>g :Clap grep
+nnoremap <leader>/ :Clap grep
+nnoremap <leader>tl :Clap floaterm<Enter>
 nnoremap <silent><leader>w :execute 'Clap grep ++query='.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
 " nnoremap <silent><leader>w :execute 'Rg '.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
 
@@ -300,9 +311,36 @@ let g:clap_preview_siz = 10
 let g:clap_open_action = { 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit', 'ctrl-i': 'split', 'ctrl-s': 'vsplit', 'ctrl-o': 'e' }
 let g:clap_enable_yanks_provider = 0
 
+" Floating terminal stuff
+let g:floaterm_keymap_new    = '<leader>tn'
+let g:floaterm_keymap_prev   = '<leader>tj'
+let g:floaterm_keymap_next   = '<leader>tk'
+let g:floaterm_keymap_quit   = '<leader>tq'
 
-" add current file to staging
+nnoremap   <silent>   <leader>tn    :FloatermNew<CR>
+tnoremap   <silent>   <F10>    <C-\><C-n>:FloatermNew<CR>
+nnoremap   <silent>   <leader>tj    :FloatermPrev<CR>
+tnoremap   <silent>   <F9>    <C-\><C-n>:FloatermPrev<CR>
+nnoremap   <silent>   <leader>tk    :FloatermNext<CR>
+tnoremap   <silent>   <F11>    <C-\><C-n>:FloatermNext<CR>
+nnoremap   <silent>   <leader>tt   :FloatermToggle<CR>
+tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
+
+" Git stuffs
+nnoremap gs :G<CR>
+nnoremap <leader>gj :difftool //2
+nnoremap <leader>gk :difftool //3
 nnoremap ga :G add %<Enter>
+
+function! s:setup_git_messenger_popup() abort
+    nmap <buffer><C-n> o
+    nmap <buffer><C-p> O
+    nmap <buffer><C-j> o
+    nmap <buffer><C-k> O
+	nmap <buffer><ESC> q
+endfunction
+
+autocmd FileType gitmessengerpopup call <SID>setup_git_messenger_popup()
 
 " peakaboo config
 
