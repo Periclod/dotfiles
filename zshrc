@@ -31,6 +31,9 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+
+export PATH="$PATH:/home/peri/.yarn/bin"
+
 #
 # Fix special keys not working
 #

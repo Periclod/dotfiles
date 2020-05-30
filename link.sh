@@ -22,6 +22,9 @@ ln -s $(pwd)/config/rofi/config.rasi ~/.config/rofi/
 mkdir -p ~/.config/redshift/
 ln -s $(pwd)/config/redshift/redshift.conf ~/.config/redshift/redshift.conf
 
+mkdir -p ~/.config/nvim/
+ln -s $(pwd)/config/nvim/init.vim ~/.config/nvim/init.vim
+
 mkdir -p ~/.local/scripts/
 ln -s $(pwd)/scripts/* ~/.local/scripts/
 

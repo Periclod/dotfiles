@@ -19,4 +19,7 @@ feh
 picom
 xss-lock
 rofi
+ripgrep
+neovim
+python-pynvim
 
