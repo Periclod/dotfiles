@@ -9,6 +9,15 @@ set tabstop=4
 set autoindent
 set smartindent
 
+" Open new split panes to right and bottom
+set splitbelow
+set splitright
+
+
+" Any buffer can be hidden without saving first
+set hidden
+set autowrite
+
 set number relativenumber
 
 " set cursor options for VTE based terminals
@@ -16,12 +25,6 @@ set number relativenumber
 let &t_SI = "\<Esc>[5 q"
 let &t_SR = "\<Esc>[3 q"
 let &t_EI = "\<Esc>[1 q"
-
-" remap ` to § because ` is a bitch
-onoremap § `
-nnoremap § `
-onoremap ` §
-nnoremap ` §
 
 " bind Ctrl+J to jump to tags (Ctrl+J is just like j per default?)
 nnoremap <C-j> <C-]>
@@ -65,4 +68,36 @@ vmap <S-Tab> :<<enter>
 if has('syntax') && has('eval')
   packadd! matchit
 endif
+
+" Plugins
+call plug#begin()
+
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+
+Plug 'junegunn/vim-peekaboo'
+
+Plug 'tpope/vim-surround'
+
+Plug 'easymotion/vim-easymotion'
+
+Plug 'qpkorr/vim-bufkill'
+
+Plug 'mhinz/vim-signify'
+
+Plug 'gaving/vim-textobj-argument'
+
+Plug 'tpope/vim-fugitive'
+
+call plug#end()
+
+
+" fzf config
+let $FZF_DEFAULT_COMMAND = 'rg --hidden --files'
+nnoremap <Leader>ls :Buffers<Enter>
+nnoremap <Leader>m :Marks<Enter>
+nnoremap <C-f> :Files<Enter>
+
+" add current file to staging
+nnoremap ga :G add %<Enter>
 
