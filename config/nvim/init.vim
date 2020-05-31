@@ -23,7 +23,7 @@ let &t_SR = "\<Esc>[3 q"
 let &t_EI = "\<Esc>[1 q"
 
 " ignore case when searching (set noic to disable)
-" set ic
+set ic
 " ignore case unless uppercase is used
 set smartcase
 
@@ -68,9 +68,6 @@ Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 " autocomplete curtesy of VSCode
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()} }
 
-" clap + coc
-Plug 'vn-ki/coc-clap'
-
 " outline sidebar
 Plug 'liuchengxu/vista.vim'
 " " linting
@@ -87,7 +84,7 @@ Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 " Delete buffers without breaking splits
 Plug 'qpkorr/vim-bufkill'
-" vcs aware sidebar
+" vcs aware gutter bar
 Plug 'mhinz/vim-signify'
 " toggle-able autosave
 Plug '907th/vim-auto-save'
@@ -254,18 +251,15 @@ set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P(%L)
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}\ 
 
 " Mappings using CoCList:
-" Show all diagnostics.
-nnoremap <silent> <leader>d  :Clap coc_diagnostics<cr>
-" nnoremap <silent> <leader>d  :<C-u>CocList --normal diagnostics<cr>
+nnoremap <silent> <leader>d  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
 " Show commands.
-nnoremap <silent> <leader>c  :CocList -N commands<cr>
-" nnoremap <silent> <leader>c  :<C-u>CocList -N commands<cr>
+nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-nnoremap <silent> <leader>s  :Clap coc_symbols<cr>
-" nnoremap <silent> <leader>s  :<C-u>CocList -I -N symbols<cr>
-" Search current document (outline)
-nnoremap <silent> <leader>o  :Clap tags<cr>
-" nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
 nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
@@ -273,20 +267,15 @@ nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
 
-nnoremap <C-j> gi
+nmap <C-j> gi
 
-
-" highlight yank
-augroup highlight_yank 
-	autocmd! 
-	autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000) 
-augroup END 
 
 " NERDTree config
 
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let g:NERDTreeWinSize=60
 nnoremap <Leader>T :NERDTreeToggle<Enter>
 nnoremap <Leader>f :NERDTreeFind<Enter>
 
@@ -301,7 +290,7 @@ let $FZF_DEFAULT_COMMAND = 'rg --hidden --files'
 nnoremap ; :Clap buffers<Enter>
 nnoremap <Leader>m :Clap marks<Enter>
 nnoremap <leader>O :Clap files<Enter>
-nnoremap <leader>/ :Clap grep
+nnoremap <leader>/ :Clap grep<Enter>
 nnoremap <leader>tl :Clap floaterm<Enter>
 nnoremap <silent><leader>w :execute 'Clap grep ++query='.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
 " nnoremap <silent><leader>w :execute 'Rg '.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
@@ -391,3 +380,55 @@ xmap y <plug>(YoinkYankPreserveCursorPosition)
 nmap Y y$
 let g:yoinkIncludeDeleteOperations = 1
 
+" Next and Last {{{
+
+" Motion for "next/last object".  "Last" here means "previous", not "final".
+" Unfortunately the "p" motion was already taken for paragraphs.
+"
+" Next acts on the next object of the given type in the current line, last acts
+" on the previous object of the given type in the current line.
+"
+" Currently only works for (, [, {, b, r, B, ', and ".
+"
+" Some examples (C marks cursor positions, V means visually selected):
+"
+" din'  -> delete in next single quotes                foo = bar('spam')
+"                                                      C
+"                                                      foo = bar('')
+"                                                                C
+"
+" canb  -> change around next parens                   foo = bar('spam')
+"                                                      C
+"                                                      foo = bar
+"                                                               C
+"
+" vil"  -> select inside last double quotes            print "hello ", name
+"                                                                        C
+"                                                      print "hello ", name
+"                                                             VVVVVV
+
+onoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+xnoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+onoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+xnoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+
+onoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+xnoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+onoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+xnoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+
+function! s:NextTextObject(motion, dir)
+  let c = nr2char(getchar())
+
+  if c ==# "b"
+      let c = "("
+  elseif c ==# "B"
+      let c = "{"
+  elseif c ==# "r"
+      let c = "["
+  endif
+
+  exe "normal! ".a:dir.c."v".a:motion.c
+endfunction
+
+" }}}
