@@ -37,6 +37,7 @@ bindsym $mod+Shift+s exec ~/.local/scripts/switch-spotify.sh
 # Autostart
 exec --no-startup-id redshift
 exec --no-startup-id flameshot
+exec --no-startup-id /usr/lib/kdeconnectd
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.

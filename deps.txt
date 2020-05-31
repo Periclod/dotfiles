@@ -22,4 +22,5 @@ rofi
 ripgrep
 neovim
 python-pynvim
+kdeconnect
 
