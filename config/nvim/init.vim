@@ -106,18 +106,24 @@ Plug 'tpope/vim-commentary'
 Plug 'rhysd/git-messenger.vim'
 " floating terms on demand
 Plug 'voldikss/vim-floaterm'
+" smooth scrolling
+Plug 'psliwka/vim-smoothie'
 
 " Themes
 Plug 'rafalbromirski/vim-aurora'
 Plug 'jcherven/jummidark.vim'
+Plug  'arzg/vim-colors-xcode'
 call plug#end()
 
 " look and feel
-set termguicolors
+" set termguicolors
 set background=dark
-colorscheme jummidark
+colorscheme xcodedark
 
 
+" smooth scroll config
+let g:smoothie_update_interval = 16
+let g:smoothie_base_speed = 20
 
 " coc.vim config
 " if hidden is not set, TextEdit might fail.
