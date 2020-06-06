@@ -73,7 +73,7 @@ Plug 'liuchengxu/vista.vim'
 " " linting
 " Plug 'dense-analysis/ale'
 " show register before pasting
-Plug 'junegunn/vim-peekaboo'
+" Plug 'junegunn/vim-peekaboo'
 " file viewer
 Plug 'preservim/nerdtree'
 " show git icons in nerdtree
@@ -108,6 +108,10 @@ Plug 'rhysd/git-messenger.vim'
 Plug 'voldikss/vim-floaterm'
 " smooth scrolling
 Plug 'psliwka/vim-smoothie'
+" .editorconfig support
+Plug 'editorconfig/editorconfig-vim'
+" Word motion for camel case
+Plug 'bkad/CamelCaseMotion'
 
 " Themes
 Plug 'rafalbromirski/vim-aurora'
@@ -120,6 +124,22 @@ call plug#end()
 set background=dark
 colorscheme xcodedark
 
+" camel case motion config
+nmap <silent> <leader>W <Plug>CamelCaseMotion_w
+nmap <silent> <leader>B <Plug>CamelCaseMotion_b
+nmap <silent> <leader>E <Plug>CamelCaseMotion_e
+nmap <silent> <leader>ge <Plug>CamelCaseMotion_ge
+vmap <silent> <leader>W <Plug>CamelCaseMotion_w
+vmap <silent> <leader>B <Plug>CamelCaseMotion_b
+vmap <silent> <leader>E <Plug>CamelCaseMotion_e
+vmap <silent> <leader>ge <Plug>CamelCaseMotion_ge
+omap <silent> <leader>W <Plug>CamelCaseMotion_w
+omap <silent> <leader>B <Plug>CamelCaseMotion_b
+omap <silent> <leader>E <Plug>CamelCaseMotion_e
+omap <silent> <leader>ge <Plug>CamelCaseMotion_ge
+
+" exclude buffers from editorconfig
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 " smooth scroll config
 let g:smoothie_update_interval = 16
@@ -168,9 +188,9 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  " enter instantly accepts completion is visible
 endif
 
 " Use `[g` and `]g` to navigate diagnostics
@@ -298,13 +318,14 @@ nnoremap <Leader>m :Clap marks<Enter>
 nnoremap <leader>O :Clap files<Enter>
 nnoremap <leader>/ :Clap grep<Enter>
 nnoremap <leader>tl :Clap floaterm<Enter>
-nnoremap <silent><leader>w :execute 'Clap grep ++query='.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
+nnoremap <silent><leader>* :execute 'Clap grep ++query='.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
 " nnoremap <silent><leader>w :execute 'Rg '.substitute(expand('<cword>'), '\v([\^\.\+\$])', '\\\1', 'g')<CR>
 
 let g:clap_theme = 'material_design_dark'
 let g:clap_preview_siz = 10
-let g:clap_open_action = { 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit', 'ctrl-i': 'split', 'ctrl-s': 'vsplit', 'ctrl-o': 'e' }
+let g:clap_open_action = { 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit', 'ctrl-s': 'split', 'ctrl-i': 'vsplit', 'ctrl-o': 'e' }
 let g:clap_enable_yanks_provider = 0
+let g:clap_layout = { 'relative': 'editor' }
 
 " Floating terminal stuff
 let g:floaterm_keymap_new    = '<leader>tn'
@@ -323,8 +344,8 @@ tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
 
 " Git stuffs
 nnoremap gs :G<CR>
-nnoremap <leader>gj :difftool //2
-nnoremap <leader>gk :difftool //3
+nnoremap <leader>gj :diffget //2
+nnoremap <leader>gk :diffget //3
 nnoremap ga :G add %<Enter>
 
 function! s:setup_git_messenger_popup() abort
@@ -438,3 +459,9 @@ function! s:NextTextObject(motion, dir)
 endfunction
 
 " }}}
+
+
+" add numbered J and K to jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
+
