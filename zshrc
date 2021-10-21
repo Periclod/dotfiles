@@ -148,8 +148,11 @@ ZSH_AUTOSUGGEST_USE_ASYNC=yes
 AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker" "k logs" "k exec")
 
 # smarter cd
-export _ZO_DATA=$HOME/.local/share/zoxide/database
-eval "$(zoxide init zsh --no-define-aliases)"
+export _ZO_ECHO=1
+eval "$(zoxide init zsh --cmd c)"
+
+# Custom cat (bat) colors
+export BAT_THEME=GitHub
 
 # fuzzy finder
 #linux
@@ -200,9 +203,6 @@ alias cat="bat"
 # use bat for man pages
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-# more comfortable zoxide
-alias c="z"
-
 # kubectl stuff
 alias k="kubectl"
 alias ka="kubectl apply"
@@ -214,4 +214,12 @@ alias ki="kubectl -n istio-system"
 alias kq="kubectl -n dev-querysalad"
 
 
+# PGO Stuff
+export PATH=/Users/peri/.pgo/pgo:$PATH
+export PGOUSER=/Users/peri/.pgo/pgo/pgouser
+export PGO_CA_CERT=/Users/peri/.pgo/pgo/client.crt
+export PGO_CLIENT_CERT=/Users/peri/.pgo/pgo/client.crt
+export PGO_CLIENT_KEY=/Users/peri/.pgo/pgo/client.key
+export PGO_APISERVER_URL='https://10.200.137.193:8443'
+export PGO_NAMESPACE=pgo
 

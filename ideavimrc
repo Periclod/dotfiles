@@ -1,10 +1,71 @@
+" Load default vim settings
 source ~/.vimrc
 
-set surround
-
-
+" Plugin pre-config
 let g:EasyMotion_startofline=1
-set easymotion
 
+" plugins
+set surround
+set commentary
+set easymotion
+set argtextobj
+set ReplaceWithRegister
+set exchange
+set highlightedyank
+
+" IdeaVim Config
+set ideajoin
+set idearefactormode keep
+set ideavimsupport dialog,singleline
+
+" custom mappings
 map <Leader> <Plug>(easymotion-prefix)
+
+" s for substitution (replace with register)
+nmap s gr
+nmap ss grr
+nmap S gr$
+xmap s gr
+" better yank config
+nmap Y y$
+
+
+" IntelliJ Action Mapping
+nmap <C-n> <Action>(MoveStatementDown)
+nmap <C-p> <Action>(MoveStatementUp)
+
+nmap gd <Action>(GotoDeclaration)
+nmap gi <Action>(GotoImplementation)
+nmap gr <Action>(FindUsages)
+nmap gt <Action>(GotoTypeDeclaration)
+
+nmap rn <Action>(RenameElement)
+nmap <Leader>iv <Action>(IntroduceVariable)
+nmap <Leader>im <Action>(IntroduceMethod)
+nmap <Leader>ic <Action>(IntroduceConstant)
+
+nmap <Leader>qf <Action>(ShowIntentionActions)
+
+nmap <C-s> <Action>(EditorSelectWord)
+xmap <C-s> <Action>(EditorSelectWord)
+
+nmap <Leader>fmt <Action>(ReformatCode)
+xmap <Leader>fmt <Action>(ReformatCode)
+
+nmap <Leader>s <Action>(GotoSymbol)
+nmap <Leader>o <Action>(ActivateStructureToolWindow)
+nmap <Leader>T <Action>(ActivateProjectToolWindow)
+nmap <Leader>F <Action>(SelectInProjectView)
+
+" cutlass (delete blackhole) remappings
+nnoremap x d
+xnoremap x d
+nnoremap xx dd
+nnoremap X D
+
+nnoremap d "_d
+nnoremap dd "_dd
+xnoremap d "_d
+
+
 

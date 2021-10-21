@@ -51,12 +51,12 @@ set wildmenu
 " copy selection in visual mode
 vmap <C-S-c> "+y
 " cut selection in visual mode
-vmap <C-S-x> "+x
+vmap <C-S-d> "+d
 
 " tab whole selection
-vmap <Tab> :><enter>
+vmap <Tab> :><cr>
 " and untab on shift+tab
-vmap <S-Tab> :<<enter>
+vmap <S-Tab> :<<cr>
 
 
 " Add optional packages.
@@ -100,4 +100,9 @@ nnoremap <C-f> :Files<Enter>
 
 " add current file to staging
 nnoremap ga :G add %<Enter>
+
+" add numbered J and K to jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
+
 
