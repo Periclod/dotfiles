@@ -1,5 +1,38 @@
 " Load default vim settings
-source ~/.vimrc
+let mapleader = " "
+
+set shiftwidth=4
+set tabstop=4
+set autoindent
+set smartindent
+
+" Open new split panes to right and bottom
+set splitbelow
+set splitright
+
+set number relativenumber
+
+" set cursor options for VTE based terminals
+" https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+let &t_SI = "\<Esc>[5 q"
+let &t_SR = "\<Esc>[3 q"
+let &t_EI = "\<Esc>[1 q"
+
+" bind Ctrl+J to jump to tags (Ctrl+J is just like j per default?)
+nnoremap <C-j> <C-]>
+
+" ignore case when searching (set noic to disable)
+" set ic
+" ignore case unless uppercase is used
+set smartcase
+
+" Highlight searches
+set hls
+" toggle highlights by Ctrl+C (clear)
+map <C-c> <esc>:noh<enter>
+" highlight while typing
+set incsearch
+
 
 " Plugin pre-config
 let g:EasyMotion_startofline=1
@@ -10,13 +43,16 @@ set commentary
 set easymotion
 set argtextobj
 set ReplaceWithRegister
+set textobj-indent
 set exchange
 set highlightedyank
+set NERDTree
 
 " IdeaVim Config
 set ideajoin
 set idearefactormode keep
 set ideavimsupport dialog,singleline
+set ideastatusicon grayscale
 
 " custom mappings
 map <Leader> <Plug>(easymotion-prefix)
@@ -29,6 +65,8 @@ xmap s gr
 " better yank config
 nmap Y y$
 
+" NERDTree mappings
+nmap <leader>p :NERDTree
 
 " IntelliJ Action Mapping
 nmap <C-n> <Action>(MoveStatementDown)
@@ -36,8 +74,10 @@ nmap <C-p> <Action>(MoveStatementUp)
 
 nmap gd <Action>(GotoDeclaration)
 nmap gi <Action>(GotoImplementation)
+nmap gq <Action>(QuickImplementations)
 nmap gr <Action>(FindUsages)
 nmap gt <Action>(GotoTypeDeclaration)
+nmap gh <Action>(ShowErrorDescription)
 
 nmap rn <Action>(RenameElement)
 nmap <Leader>iv <Action>(IntroduceVariable)
@@ -66,6 +106,3 @@ nnoremap X D
 nnoremap d "_d
 nnoremap dd "_dd
 xnoremap d "_d
-
-
-
