@@ -223,3 +223,6 @@ export PGO_CLIENT_KEY=/Users/peri/.pgo/pgo/client.key
 export PGO_APISERVER_URL='https://10.200.137.193:8443'
 export PGO_NAMESPACE=pgo
 
+# Brew stuff
+export HOMEBREW_NO_AUTO_UPDATE="1"
+
