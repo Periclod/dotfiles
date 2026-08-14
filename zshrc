@@ -4,6 +4,7 @@ setopt autocd extendedglob notify
 unsetopt beep
 bindkey -v
 # End of lines configured by zsh-newuser-install
+# fpath="$fpath /opt/homebrew/share/zsh/site-functions"
 # The following lines were added by compinstall
 
 zstyle ':completion:*' add-space true
@@ -25,14 +26,18 @@ zstyle ':completion:*' preserve-prefix '//[^/]##/'
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' substitute 'NUMERIC == 2'
-zstyle :compinstall filename '/home/peri/.zshrc'
+zstyle :compinstall filename '/Users/andrey.kutlin/.zshrc'
 
-autoload -Uz compinit
+autoload -U compinit
 compinit
 # End of lines added by compinstall
 
 
-export PATH="$PATH:/home/peri/.yarn/bin"
+
+
+source <(COMPLETE=zsh jj)
+alias jk="jj"
+
 
 #
 # Fix special keys not working
@@ -81,7 +86,7 @@ fi
 #
 # better history
 #
-HISTSIZE=5000
+HISTSIZE=500000
 SAVEHIST=5000
 # ignore duplicates
 setopt hist_ignore_all_dups
@@ -98,7 +103,20 @@ setopt share_history
 # %(?.success.failure) shows the previous command
 # %B - %b bold
 # %2~ show last 2 directory of pwd
-PROMPT='%B%2~%f%b ❯ '
+# Change color depending on last exit code
+function build_exit_code_prompt() {
+  local LAST_EXIT_CODE=$?
+  local LOCAL_PROMPT=''
+  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
+    LOCAL_PROMPT+='%F{red}❯%f'
+  else
+    LOCAL_PROMPT+='❯'
+  fi
+
+  echo $LOCAL_PROMPT
+}
+setopt PROMPT_SUBST
+PROMPT='%B%2~%f%b $(build_exit_code_prompt) '
 
 
 # cursor support for vi mode
@@ -151,9 +169,6 @@ AUTO_NOTIFY_IGNORE+=("spt" "ytop" "fo" "git diff" "cat" "bat" "sudo docker" "k l
 export _ZO_ECHO=1
 eval "$(zoxide init zsh --cmd c)"
 
-# Custom cat (bat) colors
-export BAT_THEME=GitHub
-
 # fuzzy finder
 #linux
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
@@ -192,10 +207,10 @@ export FZF_CTRL_T_OPTS="--preview 'bat --color always {}'"
 #
 # ALIASES
 #
-
+alias wipeclean="node /usr/local/bin/wipeclean"
 # color and stuff
-alias ls="exa"
-alias l="exa -laF"
+# alias ls="exa"
+alias l="ls -alh --color"
 
 # highlighting in cat!
 # alias cat="bat -p --pager never" # since bat is smart enough in non-interactive cases to be cat compatible
@@ -214,15 +229,49 @@ alias ki="kubectl -n istio-system"
 alias kq="kubectl -n dev-querysalad"
 
 
-# PGO Stuff
-export PATH=/Users/peri/.pgo/pgo:$PATH
-export PGOUSER=/Users/peri/.pgo/pgo/pgouser
-export PGO_CA_CERT=/Users/peri/.pgo/pgo/client.crt
-export PGO_CLIENT_CERT=/Users/peri/.pgo/pgo/client.crt
-export PGO_CLIENT_KEY=/Users/peri/.pgo/pgo/client.key
-export PGO_APISERVER_URL='https://10.200.137.193:8443'
-export PGO_NAMESPACE=pgo
+# Add Homebrew 'coreutils' and 'grep' to $PATH to replace outdated macOS tools
+# PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
+# PATH="$(brew --prefix)/opt/grep/libexec/gnubin:$PATH"
 
-# Brew stuff
-export HOMEBREW_NO_AUTO_UPDATE="1"
+# IServ Paths
 
+export PATH=$PATH:/Users/andrey.kutlin/.scripts/
+export PATH=$PATH:/Users/andrey.kutlin/.local/scripts
+# export PATH=$PATH:/Users/andrey.kutlin/.composer/vendor/bin/
+
+alias cf="open raycast://confetti"
+
+alias '??'="gh copilot suggest"
+
+
+# Created by `pipx` on 2024-01-25 09:49:35
+export PATH="$PATH:/Users/andrey.kutlin/Library/Python/3.11/bin"
+export PATH="$PATH:/Users/andrey.kutlin/.local/bin"
+
+
+# synapse ICU stuff
+export PYICU_CFLAGS=-std=c++11:-DPYICU_VER='"2.0.3"'
+export CPPFLAGS="-I/opt/homebrew/opt/icu4c/include"
+export LDFLAGS="-L/opt/homebrew/opt/icu4c/lib"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/icu4c/lib/pkgconfig"
+
+
+# Homebrew ruby
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
+
+# Golang
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
+export EDITOR="nvim"
+
+export OLLAMA_API_BASE=https://fry.perify.eu
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+alias dive="docker run -ti --rm  -v /var/run/docker.sock:/var/run/docker.sock docker.io/wagoodman/dive"
+export DOCKER_HOST=unix:///Users/andrey.kutlin/.colima/default/docker.sock
+export VM_SSH="root@andrey.iserv.dev"
+alias yolo-verbose="nono run --profile claude-local -- claude --dangerously-skip-permissions"

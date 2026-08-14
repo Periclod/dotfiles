@@ -10,6 +10,9 @@ set smartindent
 set splitbelow
 set splitright
 
+" Disable audio bell by enabling visualbell
+set visualbell
+
 set number relativenumber
 
 " set cursor options for VTE based terminals
@@ -38,6 +41,7 @@ set incsearch
 let g:EasyMotion_startofline=1
 
 " plugins
+set quickscope
 set surround
 set commentary
 set easymotion
@@ -53,9 +57,6 @@ set ideajoin
 set idearefactormode keep
 set ideavimsupport dialog,singleline
 set ideastatusicon grayscale
-
-" custom mappings
-map <Leader> <Plug>(easymotion-prefix)
 
 " s for substitution (replace with register)
 nmap s gr
@@ -106,3 +107,33 @@ nnoremap X D
 nnoremap d "_d
 nnoremap dd "_dd
 xnoremap d "_d
+
+" Allow quick commands in insert more
+
+imap <C-j> <C-o>
+
+
+" In next or In last motion
+onoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+xnoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+onoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+xnoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+
+onoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+xnoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+onoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+xnoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+
+function! s:NextTextObject(motion, dir)
+  let c = nr2char(getchar())
+
+  if c ==# "b"
+      let c = "("
+  elseif c ==# "B"
+      let c = "{"
+  elseif c ==# "r"
+      let c = "["
+  endif
+
+  exe "normal! ".a:dir.c."v".a:motion.c
+endfunction
